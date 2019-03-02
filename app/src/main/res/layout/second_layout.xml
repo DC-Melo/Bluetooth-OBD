@@ -13,16 +13,6 @@
         android:background="#888888">
 
         <Button
-            android:id="@+id/button_home"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_alignParentLeft="true"
-            android:background="#c9daf8"
-            android:text="主页"
-            android:textColor="#3d85c6"
-            android:visibility="gone" />
-
-        <Button
             android:id="@+id/button_scan"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
@@ -56,35 +46,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="\n开始\n" />
-
-    <RadioGroup
-        android:id="@+id/platform"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="平台"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-
-        <RadioButton
-            android:id="@+id/radio_MQB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="MQB  " />
-
-        <RadioButton
-            android:id="@+id/radio_PQ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="PQ   " />
-
-        <RadioButton
-            android:id="@+id/radio_GM"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="GM   " />
-    </RadioGroup>
 
     <RelativeLayout
         android:layout_width="match_parent"

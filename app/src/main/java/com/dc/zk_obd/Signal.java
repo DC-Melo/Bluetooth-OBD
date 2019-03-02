@@ -11,7 +11,7 @@ public class Signal {
     private int length;
     private double factor=1;
     private double offset=0;
-    private byte[] canvalue= new byte[10];;
+    private byte[] canvalue= new byte[10];
     private double signalvalue;
 
     public byte[] getCanvalue() {

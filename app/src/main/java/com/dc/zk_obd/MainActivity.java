@@ -50,7 +50,7 @@ public class MainActivity extends Activity {
     private BluetoothDevice mDevice = null;
     // private BluetoothDevice mDevice = null;
     private UartService mService = null;
-    private Button btnHome, btnScan, btnSend,btnStart, btnReset, btnClear;
+    private Button  btnScan, btnSend,btnStart, btnReset, btnClear;
     private BluetoothAdapter mBtAdapter = null;
     private EditText editText_sendMessage;
     private TextView textview_iscConnected;
@@ -68,15 +68,9 @@ public class MainActivity extends Activity {
     private ImageButton imagebuttonScan;
     private Spinner spinnerInterval;
     private TextView textViewRecNumVal;
-
-
     Signal odometer=new Signal();
-
     Signal tank=new Signal();
-
     Signal voltage=new Signal();
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,12 +100,10 @@ public class MainActivity extends Activity {
         radioReASCII = (RadioButton) findViewById(R.id.radio_receive_ASCII);
         radioReHEX = (RadioButton) findViewById(R.id.radio_receive_HEX);
 
-        radioMQB= (RadioButton) findViewById(R.id.radio_MQB);
-        radioPQ = (RadioButton) findViewById(R.id.radio_PQ);
-        radioGM = (RadioButton) findViewById(R.id.radio_GM);
+
 
         textViewRecLength = (TextView) findViewById(R.id.textView_rec_length_val);
-        btnHome = (Button) findViewById(R.id.button_home);
+
         textViewRecNumVal = (TextView) findViewById(R.id.textView_Rec_Num_Val);
         // imagebuttonHome = (ImageButton) findViewById(R.id.imageButton_home);
         // 发送时间间隔配置
@@ -280,9 +272,10 @@ public class MainActivity extends Activity {
                     }
                 }
                 else if (mService.mConnectionState==2){
-                    functionNum++;
+
+
                     functionNum=functionNum%3;
-                    if (radioMQB.isChecked()) {
+
                         byte[] bytes=odometer.getCancmd();
 
                         String s1=Utils.bytesToHexString(bytes);
@@ -293,32 +286,6 @@ public class MainActivity extends Activity {
                         } catch (Exception e) {
                             System.out.println(e.toString());
                         }
-                    }
-                    else if (radioPQ.isChecked()){
-                        String s1="2"+String.valueOf(functionNum);
-                        byte[] bytes;
-                        bytes = Utils.hexStringToBytes(s1);
-                        mService.writeRXCharacteristic(bytes);
-                        try {
-                            listAdapter.add("[" + DateFormat.getTimeInstance().format(new Date()) + "] 发送0x: " +s1);
-                            messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
-                        } catch (Exception e) {
-                            System.out.println(e.toString());
-                        }
-                    }
-                    else{
-                        String s1="3"+String.valueOf(functionNum);
-                        byte[] bytes;
-                        bytes = Utils.hexStringToBytes(s1);
-                        mService.writeRXCharacteristic(bytes);
-                        try {
-                            listAdapter.add("[" + DateFormat.getTimeInstance().format(new Date()) + "] 发送0x: " +s1);
-                            messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
-                        } catch (Exception e) {
-                            System.out.println(e.toString());
-                        }
-                    }
-
 
                 }
             }
@@ -341,12 +308,7 @@ public class MainActivity extends Activity {
                 recValueNum = 0;
             }
         });
-        btnHome.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+
     }
 
     @Override
