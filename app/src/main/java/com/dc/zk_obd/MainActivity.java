@@ -57,11 +57,6 @@ public class MainActivity extends Activity {
     private TextView sendValueLength;
     private long sendValueNum = 0;
     private long recValueNum = 0;
-    //ID,type,Byte,bit,length,offset,factor,
-    private int[] config={
-            0x6B4,11,	0,0,0,	0,0,0,//vin
-            0x6B7,1,	1,6,10,	7,0,1,//KBI_Inhalt_Tank
-            0x6B7,1,	1,1,0,	20,0,1};//KBI_Kilometerstand
     public int functionNum = 0;
     private TextView sendTimes;
     private CheckBox checkBox_dataRec;
@@ -74,11 +69,24 @@ public class MainActivity extends Activity {
     private Spinner spinnerInterval;
     private TextView textViewRecNumVal;
 
+
+    Signal odometer=new Signal();
+
+    Signal tank=new Signal();
+
+    Signal voltage=new Signal();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.second_layout);
+
+
+        odometer.setCancmd(new byte[]{0x06, (byte) 0xb7, 0x1});
+        tank.setCancmd(new byte[]{0x06, (byte) 0xb8, 0x1});
+        voltage.setCancmd(new byte[]{0x06, (byte) 0x63, 0x1});
 
         // imagebuttonScan=(ImageButton) findViewById(R.id.imageButton_scan);
         btnScan = (Button) findViewById(R.id.button_scan);
@@ -275,10 +283,8 @@ public class MainActivity extends Activity {
                     functionNum++;
                     functionNum=functionNum%3;
                     if (radioMQB.isChecked()) {
-                        byte[] bytes=new byte[3];
-                        bytes[0]=(byte)((config[functionNum*8]>>8) & 0xff);
-                        bytes[1]=(byte)(config[functionNum*8] & 0xff);
-                        bytes[2]=(byte)(config[functionNum*8+1] & 0xff);
+                        byte[] bytes=odometer.getCancmd();
+
                         String s1=Utils.bytesToHexString(bytes);
                         mService.writeRXCharacteristic(bytes);
                         try {
@@ -458,7 +464,7 @@ public class MainActivity extends Activity {
 
                 if(rxValue.length >2){
                     int receiveID=rxValue[1] & 0xFF | (rxValue[0] & 0xFF) << 8;
-                    if(receiveID==config[0]){
+/*                    if(receiveID==config[0]){
                         String Rx_asc_str =Utils.bytesToString(rxValue) ;
                         listAdapter.add("[车辆VIN号]:"+Rx_asc_str );
                         messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
@@ -469,7 +475,7 @@ public class MainActivity extends Activity {
                     }else if(receiveID==config[16]){
                         listAdapter.add("[车辆里程]:" );
                         messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
-                    }
+                    }*/
                 }
                 textViewRecLength.setText(Integer.toString(rxValue.length));
                 textViewRecNumVal.setText((++recValueNum) + "");
