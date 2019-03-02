@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Main2Activity">
+
+    <LinearLayout
+        android:layout_width="395dp"
+        android:layout_height="715dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+        <Button
+            android:id="@+id/button_scan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="搜索"/>
+
+        <Button
+            android:id="@+id/button_Start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="\n开始\n" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/car"/>
+        <ListView
+            android:id="@+id/listMessage"
+            android:layout_width="match_parent"
+            android:layout_height="133dp"
+            android:layout_weight="0.19"
+            android:background="#d9d9d9"></ListView>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

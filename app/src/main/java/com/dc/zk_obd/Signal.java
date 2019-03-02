@@ -4,8 +4,9 @@ public class Signal {
     private String dbname;
     private String messagename;
     private int canid;
-    private byte[] cancmd= new byte[3];
+    private byte[] cancmd;
     private String signalname;
+    private int signaltype;
     private int startbyte;
     private int startbit;
     private int length;

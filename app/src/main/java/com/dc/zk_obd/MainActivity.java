@@ -50,7 +50,7 @@ public class MainActivity extends Activity {
     private BluetoothDevice mDevice = null;
     // private BluetoothDevice mDevice = null;
     private UartService mService = null;
-    private Button  btnScan, btnSend,btnStart, btnReset, btnClear;
+    private Button  btnScan,btnStart;
     private BluetoothAdapter mBtAdapter = null;
     private EditText editText_sendMessage;
     private TextView textview_iscConnected;
@@ -62,7 +62,6 @@ public class MainActivity extends Activity {
     private CheckBox checkBox_dataRec;
     private CheckBox checkBox_autoSend;
     private EditText editText_sendIntervalVal;
-    private RadioButton radioMQB,radioPQ,radioGM,radioSendASCII, radioSendHEX, radioReASCII, radioReHEX;
     private TextView textViewRecLength;
     // private ImageButton imagebuttonHome;
     private ImageButton imagebuttonScan;
@@ -82,12 +81,10 @@ public class MainActivity extends Activity {
         tank.setCancmd(new byte[]{0x06, (byte) 0xb8, 0x1});
         voltage.setCancmd(new byte[]{0x06, (byte) 0x63, 0x1});
 
-        // imagebuttonScan=(ImageButton) findViewById(R.id.imageButton_scan);
         btnScan = (Button) findViewById(R.id.button_scan);
-        btnSend = (Button) findViewById(R.id.button_send);
+
         btnStart = (Button) findViewById(R.id.button_Start);
-        btnReset = (Button) findViewById(R.id.button_reset);
-        btnClear = (Button) findViewById(R.id.button_clear);
+
         editText_sendMessage = (EditText) findViewById(R.id.edittext_sendText);
         textview_iscConnected = (TextView) findViewById(R.id.textView_isconnected_info);
         sendValueLength = (TextView) findViewById(R.id.textView_send_length_val);
@@ -95,16 +92,11 @@ public class MainActivity extends Activity {
         checkBox_dataRec = (CheckBox) findViewById(R.id.checkBox_data_rec);
         checkBox_autoSend = (CheckBox) findViewById(R.id.checkBox_auto_send);
         editText_sendIntervalVal = (EditText) findViewById(R.id.edittext_send_interval_val);
-        radioSendASCII = (RadioButton) findViewById(R.id.radio_send_ASCII);
-        radioSendHEX = (RadioButton) findViewById(R.id.radio_send_HEX);
-        radioReASCII = (RadioButton) findViewById(R.id.radio_receive_ASCII);
-        radioReHEX = (RadioButton) findViewById(R.id.radio_receive_HEX);
 
 
+   /*     textViewRecLength = (TextView) findViewById(R.id.textView_rec_length_val);*/
 
-        textViewRecLength = (TextView) findViewById(R.id.textView_rec_length_val);
-
-        textViewRecNumVal = (TextView) findViewById(R.id.textView_Rec_Num_Val);
+ /*       textViewRecNumVal = (TextView) findViewById(R.id.textView_Rec_Num_Val);*/
         // imagebuttonHome = (ImageButton) findViewById(R.id.imageButton_home);
         // 发送时间间隔配置
         // spinnerInterval = (Spinner) findViewById(R.id.spinner_interval);
@@ -124,8 +116,6 @@ public class MainActivity extends Activity {
         editText_sendMessage.setEnabled(false);
         checkBox_autoSend.setEnabled(false);
         editText_sendIntervalVal.setEnabled(false);
-        btnSend.setEnabled(false);
-        //btnStart.setEnabled(false);
         Init_service();// 初始化后台服务
 
         new Thread() {
@@ -190,54 +180,6 @@ public class MainActivity extends Activity {
                 }
             }
         });
-        // "Send"按钮对应的监听器
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (radioSendASCII.isChecked()) {
-                    try {
-                        String message = editText_sendMessage.getText().toString();
-                        byte[] Tx_value = message.getBytes("UTF-8");
-                        mService.writeRXCharacteristic(Tx_value);
-                        sendValueLength.setText(Tx_value.length + "");
-                        sendTimes.setText((++sendValueNum) + "");
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                } else if (radioSendHEX.isChecked()) {
-                    boolean hex_flag = true;
-                    String s1 = editText_sendMessage.getText().toString();
-                    for (int i = 0; i < s1.length(); i++) {
-                        char charV = s1.charAt(i);
-                        if ((charV >= '0' && charV <= '9') || (charV >= 'a' && charV <= 'f')
-                                || (charV >= 'A' && charV <= 'F')) {
-                        } else {
-                            hex_flag = false;
-                            break;
-                        }
-                    }
-                    if (hex_flag) {
-                        byte[] bytes;
-                        if (0 == s1.length() % 2) {
-                            bytes = Utils.hexStringToBytes(s1);
-                            mService.writeRXCharacteristic(bytes);
-                            sendValueLength.setText(s1.length() + "");
-                            sendTimes.setText((++sendValueNum) + "");
-                        } else {
-                            String s2 = s1.substring(0, (s1.length() - 1));
-                            bytes = Utils.hexStringToBytes(s2);
-                            mService.writeRXCharacteristic(bytes);
-                            sendValueLength.setText((s1.length() - 1) + "");
-                            sendTimes.setText((++sendValueNum) + "");
-                        }
-                    } else {
-                        Toast toast = Toast.makeText(getApplicationContext(), "【错误】: 输入的字符不是 16进制", 1500);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-                    }
-                }
-            }
-        });
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -288,24 +230,6 @@ public class MainActivity extends Activity {
                         }
 
                 }
-            }
-        });
-        btnReset.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editText_sendMessage.setText("");
-                sendValueLength.setText("");
-                sendTimes.setText("");
-                sendValueNum = 0;
-            }
-        });
-        btnClear.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listAdapter.clear();
-                textViewRecLength.setText("");
-                textViewRecNumVal.setText("");
-                recValueNum = 0;
             }
         });
 
@@ -396,7 +320,7 @@ public class MainActivity extends Activity {
                 editText_sendMessage.setEnabled(true);
                 checkBox_autoSend.setEnabled(true);
                 editText_sendIntervalVal.setEnabled(true);
-                btnSend.setEnabled(true);
+                /*btnSend.setEnabled(true);*/
                 //btnStart.setEnabled(true);
                 listAdapter.add("[" + currentDateTimeString + "] 建立连接: " + mDevice.getName());
                 messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
@@ -411,14 +335,14 @@ public class MainActivity extends Activity {
                 editText_sendMessage.setEnabled(false);
                 checkBox_autoSend.setEnabled(false);
                 editText_sendIntervalVal.setEnabled(false);
-                btnSend.setEnabled(false);
+                /*btnSend.setEnabled(false);*/
                 //btnStart.setEnabled(false);
                 listAdapter.add("[" + currentDateTimeString + "] 取消连接: " + mDevice.getName());
                 mState = UART_PROFILE_DISCONNECTED;
                 mService.close();
             }
             // 有数据可以接收
-            if ((action.equals(UartService.ACTION_DATA_AVAILABLE)) && (checkBox_dataRec.isChecked())) {
+            if ((action.equals(UartService.ACTION_DATA_AVAILABLE)) /*&& (checkBox_dataRec.isChecked())*/) {
                 byte[] rxValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
                 String Rx_str =Utils.bytesToHexString(rxValue) ;
                 listAdapter.add("[" + DateFormat.getTimeInstance().format(new Date()) + "] 收到0x: " + Rx_str);
@@ -439,8 +363,8 @@ public class MainActivity extends Activity {
                         messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
                     }*/
                 }
-                textViewRecLength.setText(Integer.toString(rxValue.length));
-                textViewRecNumVal.setText((++recValueNum) + "");
+/*                textViewRecLength.setText(Integer.toString(rxValue.length));
+                textViewRecNumVal.setText((++recValueNum) + "");*/
             }
             // 未知功能1
             if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
